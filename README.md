@@ -17,3 +17,17 @@ The dataset is synthetically generated from a deep learning model trained on the
 | **Payment** | Auto-pay flag, electronic check flag |
 | **Composite Risk** | Weighted score combining contract risk, auto-pay, new customer, service count |
 | **Interactions** | `risk × services`, `risk × charge`, `senior × monthly`, `senior × risk` |
+
+
+
+2. Encoding;
+
+Label encoding used globally for Optuna tuning speed.
+Target encoding applied inside each CV fold to prevent leakage:
+
+
+te = TargetEncoder(cols=cat_cols, smoothing=10)
+X_tr[cat_cols]  = te.fit_transform(X_tr[cat_cols], y_tr)  # fit on train fold only
+X_val[cat_cols] = te.transform(X_val[cat_cols])           # apply to val
+
+
